@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checklist Barrancas de San José</title>
+    <title>Plan de trabajo BARRANCAS DE SAN JOSE</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -37,6 +37,15 @@
         .form-overlay { display: none; }
         .form-overlay.visible { display: flex; }
         .filter-btn.active { background-color: #009999; color: white; border-color: #009999; }
+        
+        @media print {
+            body { background-color: white; }
+            #form-overlay, #controls, #summary, footer, .no-print { display: none !important; }
+            main, .container { padding: 0 !important; margin: 0 !important; max-width: 100% !important; }
+            .accordion-content { max-height: none !important; display: block !important; }
+            .bg-white { box-shadow: none !important; }
+            @page { size: landscape; }
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -93,29 +102,41 @@
 
     <div class="container mx-auto p-4 sm:p-6 lg:p-8">
         <header class="text-center mb-8">
-            <h1 class="text-3xl sm:text-4xl font-bold text-institutional">Checklist temas pendientes Barrancas de San José</h1>
-            <p class="text-md text-gray-600 mt-2">Seguimiento interactivo del estado de temas pendientes</p>
+            <h1 class="text-3xl sm:text-4xl font-bold text-institutional">Plan de trabajo BARRANCAS DE SAN JOSE</h1>
+            <p class="text-xs text-gray-400 font-semibold mt-1">V 3.4</p>
+            <p class="text-md text-gray-600 mt-2">Seguimiento interactivo del estado del plan de trabajo</p>
         </header>
 
-        <div id="controls" class="bg-white p-4 rounded-lg shadow-md mb-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div id="controls" class="bg-white p-4 rounded-lg shadow-md mb-8 space-y-4">
             <div class="flex items-center gap-2">
                 <button id="add-task-btn" class="bg-institutional text-white font-bold py-2 px-4 rounded-lg hover:bg-opacity-90 transition-colors">+ Añadir Tarea</button>
                 <button id="export-pdf-btn" class="bg-gray-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors">Exportar a PDF</button>
             </div>
-            <div class="flex flex-col sm:flex-row gap-4 items-center">
-                <div id="status-filters" class="flex flex-wrap items-center gap-2">
-                    <span class="text-sm font-semibold text-gray-600 mr-2">Estado:</span>
-                    <button class="filter-btn active py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="status" data-filter="Todos">Todos</button>
-                    <button class="filter-btn py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="status" data-filter="Pendiente">Pendiente</button>
-                    <button class="filter-btn py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="status" data-filter="En Proceso">En Proceso</button>
-                    <button class="filter-btn py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="status" data-filter="OK">OK</button>
-                </div>
-                <div id="priority-filters" class="flex flex-wrap items-center gap-2 border-t sm:border-t-0 sm:border-l pt-2 sm:pt-0 sm:pl-4 mt-2 sm:mt-0">
-                    <span class="text-sm font-semibold text-gray-600 mr-2">Prioridad:</span>
-                    <button class="filter-btn active py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="priority" data-filter="Todos">Todas</button>
-                    <button class="filter-btn py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="priority" data-filter="Baja">Baja</button>
-                    <button class="filter-btn py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="priority" data-filter="Media">Media</button>
-                    <button class="filter-btn py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="priority" data-filter="Alta">Alta</button>
+            <div class="border-t border-gray-200 pt-4">
+                <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                    <h3 class="text-md font-bold text-gray-700 flex-shrink-0">Filtros:</h3>
+                    <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center w-full">
+                        <div id="status-filters" class="flex flex-wrap items-center gap-2">
+                            <span class="text-sm font-semibold text-gray-600 mr-2">Estado:</span>
+                            <button class="filter-btn active py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="status" data-filter="Todos">Todos</button>
+                            <button class="filter-btn py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="status" data-filter="Pendiente">Pendiente</button>
+                            <button class="filter-btn py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="status" data-filter="En Proceso">En Proceso</button>
+                            <button class="filter-btn py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="status" data-filter="OK">OK</button>
+                        </div>
+                        <div id="priority-filters" class="flex flex-wrap items-center gap-2 border-t sm:border-t-0 sm:border-l pt-2 sm:pt-0 sm:pl-4 mt-2 sm:mt-0">
+                            <span class="text-sm font-semibold text-gray-600 mr-2">Prioridad:</span>
+                            <button class="filter-btn active py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="priority" data-filter="Todos">Todas</button>
+                            <button class="filter-btn py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="priority" data-filter="Baja">Baja</button>
+                            <button class="filter-btn py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="priority" data-filter="Media">Media</button>
+                            <button class="filter-btn py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="priority" data-filter="Alta">Alta</button>
+                        </div>
+                        <div id="date-filters" class="flex flex-wrap items-center gap-2 border-t sm:border-t-0 sm:border-l pt-2 sm:pt-0 sm:pl-4 mt-2 sm:mt-0">
+                            <span class="text-sm font-semibold text-gray-600 mr-2">Vence:</span>
+                            <button class="filter-btn active py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="date" data-filter="Todas">Todas</button>
+                            <button class="filter-btn py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="date" data-filter="Vencidas">Vencidas</button>
+                            <button class="filter-btn py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="date" data-filter="Proximas">Próximas (7d)</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -146,11 +167,11 @@
     </div>
 
     <script>
-        // --- INICIO DE LA CONFIGURACIÓN DE FIREBASE (Barrancas de San José) ---
+        // --- INICIO DE LA CONFIGURACIÓN DE FIREBASE (BARRANCAS DE SAN JOSE) ---
         const firebaseConfig = {
             apiKey: "AIzaSyDskH3zhOCZ6hILyoRk0buViR0jlGqkcT4",
             authDomain: "checklist-barrancas-sj.firebaseapp.com",
-            databaseURL: "https://checklist-barrancas-sj-default-rtdb.firebaseio.com", // <-- ESTA LÍNEA ESTABA FALTANDO
+            databaseURL: "https://checklist-barrancas-sj-default-rtdb.firebaseio.com",
             projectId: "checklist-barrancas-sj",
             storageBucket: "checklist-barrancas-sj.firebasestorage.app",
             messagingSenderId: "40980053699",
@@ -160,26 +181,24 @@
         const database = firebase.database();
         // --- FIN DE LA CONFIGURACIÓN DE FIREBASE ---
 
-        // --- CONFIGURACIÓN Y DATOS GLOBALES ---
         let checklistData = [];
         let statusChart = null;
         let responsibleChart = null; 
         let currentStatusFilter = 'Todos';
         let currentPriorityFilter = 'Todos';
+        let currentDateFilter = 'Todas';
 
         const rubros = ['Operativos', 'Obras de infraestructura', 'Administrativos', 'Archivado'];
         const responsibleOptions = ['Administrador', 'Intendente', 'Proveedor', 'Operadora', 'RRHH', 'Compras', 'Otros'];
         const statusOrder = ['Pendiente', 'En Proceso', 'OK'];
         const statusOptions = { 'Pendiente': 'bg-yellow-100 text-yellow-800 border-yellow-300', 'OK': 'bg-institutional/20 text-institutional border-institutional/40', 'En Proceso': 'bg-blue-100 text-blue-800 border-blue-300' };
         const statusColors = { 'Pendiente': '#FBBF24', 'OK': '#009999', 'En Proceso': '#60A5FA' };
-        
         const priorityOptions = ['Baja', 'Media', 'Alta'];
         const priorityStyles = {
             'Alta': 'bg-red-100 text-red-800 border-red-300',
             'Media': 'bg-yellow-100 text-yellow-800 border-yellow-300',
             'Baja': 'bg-gray-100 text-gray-800 border-gray-300',
         };
-
         const rubroIcons = {
             'Operativos': `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>`,
             'Obras de infraestructura': `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>`,
@@ -199,75 +218,137 @@
             });
         }
 
-        function renderChecklist() {
-            const container = document.getElementById('checklist-container');
-            container.innerHTML = '';
-            const filteredData = checklistData.filter(item => 
+        function getFilteredData() {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            let filtered = checklistData.filter(item => 
                 (currentStatusFilter === 'Todos' || item.estado === currentStatusFilter) &&
                 (currentPriorityFilter === 'Todos' || item.prioridad === currentPriorityFilter)
             );
+            if (currentDateFilter !== 'Todas') {
+                filtered = filtered.filter(item => {
+                    if (!item.deadline) return false;
+                    const taskDate = new Date(item.deadline + 'T00:00:00');
+                    if (currentDateFilter === 'Vencidas') {
+                        return taskDate < today && item.estado !== 'OK';
+                    }
+                    if (currentDateFilter === 'Proximas') {
+                        const sevenDaysFromNow = new Date(today);
+                        sevenDaysFromNow.setDate(today.getDate() + 7);
+                        return taskDate >= today && taskDate <= sevenDaysFromNow;
+                    }
+                    return true;
+                });
+            }
+            return filtered;
+        }
+
+        function renderChecklist() {
+            const container = document.getElementById('checklist-container');
+            const openRubros = new Set();
+            container.querySelectorAll('.accordion-content.open').forEach(content => {
+                const header = content.previousElementSibling;
+                if (header && header.querySelector('h3')) {
+                    openRubros.add(header.querySelector('h3').textContent);
+                }
+            });
+            const itemBeingEdited = checklistData.find(item => item.isEditing);
+            if (itemBeingEdited) {
+                openRubros.add(itemBeingEdited.rubro);
+            }
+
+            container.innerHTML = '';
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const filteredData = getFilteredData();
             const groupedData = filteredData.reduce((acc, item) => { (acc[item.rubro] = acc[item.rubro] || []).push(item); return acc; }, {});
 
             rubros.forEach(rubro => {
-                const items = groupedData[rubro] || [];
+                const itemsInRubro = checklistData.filter(i => i.rubro === rubro);
+                const itemsToShow = groupedData[rubro] || [];
+                
+                itemsToShow.sort((a, b) => (a.deadline && b.deadline) ? new Date(a.deadline) - new Date(b.deadline) : !a.deadline - !b.deadline);
+
                 const accordionItem = document.createElement('div');
                 accordionItem.className = 'bg-white rounded-lg shadow-md overflow-hidden';
-                const okCount = items.filter(i => i.estado === 'OK').length;
+                const okCount = itemsInRubro.filter(i => i.estado === 'OK').length;
+                const totalInRubro = itemsInRubro.length;
+                
                 const header = document.createElement('div');
                 header.className = 'p-4 flex justify-between items-center cursor-pointer hover:bg-gray-50';
-                header.onclick = () => toggleAccordion(accordionItem);
-                header.innerHTML = `<div class="flex items-center">${rubroIcons[rubro] || ''}<h3 class="text-lg font-bold text-gray-700">${rubro}</h3></div><div class="flex items-center space-x-2"><span class="text-sm font-semibold text-gray-600">${okCount}/${items.length}</span><svg class="w-6 h-6 text-gray-500 transition-transform transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></div>`;
+                header.onclick = (event) => { if (!event.target.closest('.no-toggle')) { toggleAccordion(accordionItem); } };
+
+                let overdueIndicator = '';
+                const hasOverdue = itemsInRubro.some(item => {
+                    if (!item.deadline || item.estado === 'OK') return false;
+                    return new Date(item.deadline + 'T00:00:00') < today;
+                });
+                if (hasOverdue) {
+                    overdueIndicator = '<span class="w-2.5 h-2.5 bg-red-500 rounded-full ml-2 animate-pulse"></span>';
+                }
+
+                header.innerHTML = `<div class="flex items-center">${rubroIcons[rubro] || ''}<h3 class="text-lg font-bold text-gray-700">${rubro}</h3>${overdueIndicator}</div><div class="flex items-center space-x-2"><span class="text-sm font-semibold text-gray-600">${okCount}/${totalInRubro}</span><svg class="w-6 h-6 text-gray-500 transition-transform transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></div>`;
+                
                 const content = document.createElement('div');
                 content.className = 'accordion-content border-t border-gray-200';
                 
-                if (items.length === 0) {
-                     content.innerHTML = `<p class="text-center text-gray-500 p-4">No hay tareas en este rubro.</p>`;
+                if (itemsToShow.length === 0) {
+                     content.innerHTML = `<p class="text-center text-gray-500 p-4">No hay tareas que coincidan con los filtros actuales.</p>`;
                 } else {
+                    const headerRow = document.createElement('div');
+                    headerRow.className = 'hidden md:grid grid-cols-[1fr_110px_150px_180px_120px_220px] items-center gap-x-4 px-4 pt-2 text-xs text-gray-500 font-bold uppercase';
+                    headerRow.innerHTML = `<span>Requerimiento</span><span class="text-center">Prioridad</span><span>Responsable</span><span>Vencimiento</span><span class="text-center">Estado</span><span class="text-center">Acciones</span>`;
+                    content.appendChild(headerRow);
+                    
                     const list = document.createElement('ul');
                     list.className = 'divide-y divide-gray-200';
-                    items.forEach(item => {
+                    itemsToShow.forEach(item => {
                         const listItem = document.createElement('li');
                         listItem.className = 'px-4 py-3';
                         const taskRow = document.createElement('div');
-                        taskRow.className = 'flex flex-col sm:flex-row items-start sm:items-center gap-x-4 gap-y-2';
+                        taskRow.className = 'grid grid-cols-1 md:grid-cols-[1fr_110px_150px_180px_120px_220px] items-center gap-x-4 gap-y-2';
                         
                         if (item.isEditing) {
                             const editInput = document.createElement('textarea'); editInput.value = item.requerimiento;
-                            editInput.className = 'flex-1 p-1 border rounded-md w-full'; editInput.id = `edit-input-${item.id}`; editInput.rows = 2;
+                            editInput.className = 'p-1 border rounded-md w-full no-toggle col-span-full md:col-span-1'; editInput.id = `edit-input-${item.id}`; editInput.rows = 2;
                             taskRow.appendChild(editInput);
                         } else {
-                            const requerimientoP = document.createElement('p'); requerimientoP.className = 'flex-1 text-gray-800 font-medium';
+                            const requerimientoP = document.createElement('p'); requerimientoP.className = 'text-gray-800 font-medium col-span-full md:col-span-1 break-words';
                             requerimientoP.textContent = item.requerimiento; taskRow.appendChild(requerimientoP);
                         }
                         
-                        const detailsDiv = document.createElement('div');
-                        detailsDiv.className = 'flex items-center gap-x-4';
-
                         const prioritySelect = document.createElement('select');
-                        prioritySelect.className = 'priority-select p-1 border rounded-md text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-institutional';
+                        prioritySelect.className = 'priority-select p-1 border rounded-md text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-institutional no-toggle w-full';
                         priorityOptions.forEach(prio => { const option = document.createElement('option'); option.value = prio; option.textContent = prio; if (item.prioridad === prio) option.selected = true; prioritySelect.add(option); });
                         prioritySelect.className += ` ${priorityStyles[item.prioridad] || priorityStyles['Baja']}`;
                         prioritySelect.onchange = (e) => { handleFieldChange(e, item.id, 'prioridad'); };
-                        detailsDiv.appendChild(prioritySelect);
+                        taskRow.appendChild(prioritySelect);
                         
-                        const responsibleSelect = document.createElement('select'); responsibleSelect.className = 'responsible-select p-1 border-b focus:border-institutional focus:outline-none w-36 text-sm';
+                        const responsibleSelect = document.createElement('select'); responsibleSelect.className = 'responsible-select p-1 border-b focus:border-institutional focus:outline-none w-full text-sm bg-transparent no-toggle';
                         responsibleOptions.forEach(resp => { const option = document.createElement('option'); option.value = resp; option.textContent = resp; if (item.responsable === resp) option.selected = true; responsibleSelect.add(option); });
                         responsibleSelect.onchange = (e) => handleFieldChange(e, item.id, 'responsable');
-                        detailsDiv.appendChild(responsibleSelect);
-                        const deadlineDiv = document.createElement('div'); deadlineDiv.className = 'flex items-center text-sm';
-                        deadlineDiv.innerHTML = `<svg class="h-5 w-5 mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>`;
+                        taskRow.appendChild(responsibleSelect);
+
+                        const deadlineDiv = document.createElement('div'); 
+                        deadlineDiv.className = 'flex items-center text-sm no-toggle';
+                        if (item.deadline && new Date(item.deadline + 'T00:00:00') < today && item.estado !== 'OK') {
+                            deadlineDiv.classList.add('text-red-600', 'font-bold');
+                        }
+                        deadlineDiv.innerHTML = `<svg class="h-5 w-5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>`;
                         const deadlineInput = document.createElement('input'); deadlineInput.type = 'date'; deadlineInput.value = item.deadline;
-                        deadlineInput.className = 'p-1 border-b focus:border-institutional focus:outline-none';
+                        deadlineInput.className = 'p-1 border-b focus:border-institutional focus:outline-none bg-transparent w-full';
                         deadlineInput.onchange = (e) => handleFieldChange(e, item.id, 'deadline');
-                        deadlineDiv.appendChild(deadlineInput); detailsDiv.appendChild(deadlineDiv);
-                        taskRow.appendChild(detailsDiv);
+                        deadlineDiv.appendChild(deadlineInput); 
+                        taskRow.appendChild(deadlineDiv);
                         
-                        const statusSelect = document.createElement('select'); statusSelect.className = 'status-select w-full sm:w-auto p-2 border rounded-md text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-institutional';
+                        const statusSelect = document.createElement('select'); statusSelect.className = 'status-select p-2 border rounded-md text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-institutional no-toggle w-full';
                         statusOrder.forEach(status => { const option = document.createElement('option'); option.value = status; option.textContent = status; if (item.estado === status) option.selected = true; statusSelect.add(option); });
                         applyStatusStyles(statusSelect, item.estado);
                         statusSelect.addEventListener('change', (e) => handleStatusChange(e, item.id));
                         taskRow.appendChild(statusSelect);
-                        const actionsDiv = document.createElement('div'); actionsDiv.className = 'flex items-center gap-x-2';
+                        
+                        const actionsDiv = document.createElement('div'); actionsDiv.className = 'flex items-center gap-x-1 no-toggle justify-self-start md:justify-self-center';
                         if (item.isEditing) {
                             const saveBtn = document.createElement('button'); saveBtn.className = 'bg-institutional text-white font-bold py-1 px-3 rounded-md text-sm';
                             saveBtn.textContent = 'Guardar'; saveBtn.onclick = () => handleSaveTask(item.id); actionsDiv.appendChild(saveBtn);
@@ -290,6 +371,11 @@
                     });
                     content.appendChild(list);
                 }
+                if (openRubros.has(rubro)) {
+                    content.classList.add('open');
+                    const icon = header.querySelector('svg:last-child');
+                    if (icon) icon.classList.add('rotate-180');
+                }
                 accordionItem.appendChild(header);
                 accordionItem.appendChild(content);
                 container.appendChild(accordionItem);
@@ -298,10 +384,7 @@
         }
 
         function updateSummary() {
-            const dataToSummarize = checklistData.filter(item => 
-                (currentStatusFilter === 'Todos' || item.estado === currentStatusFilter) &&
-                (currentPriorityFilter === 'Todos' || item.prioridad === currentPriorityFilter)
-            );
+            const dataToSummarize = getFilteredData();
             const total = dataToSummarize.length;
             const stats = dataToSummarize.reduce((acc, item) => { (acc[item.estado] = (acc[item.estado] || 0) + 1); return acc; }, {});
             const okCount = stats['OK'] || 0;
@@ -310,6 +393,7 @@
             let filterText = [];
             if (currentStatusFilter !== 'Todos') filterText.push(`Estado: ${currentStatusFilter}`);
             if (currentPriorityFilter !== 'Todos') filterText.push(`Prioridad: ${currentPriorityFilter}`);
+            if (currentDateFilter !== 'Todas') filterText.push(`Vence: ${currentDateFilter}`);
             document.getElementById('filter-label').textContent = filterText.length > 0 ? `(${filterText.join(', ')})` : '';
             renderPieChart(stats);
             renderResponsibleChart(dataToSummarize);
@@ -350,13 +434,11 @@
             const filterType = event.target.dataset.filterType;
             const filterValue = event.target.dataset.filter;
             if (filterType) {
-                if (filterType === 'status') {
-                    currentStatusFilter = filterValue;
-                    document.querySelectorAll('#status-filters .filter-btn').forEach(btn => btn.classList.remove('active'));
-                } else if (filterType === 'priority') {
-                    currentPriorityFilter = filterValue;
-                    document.querySelectorAll('#priority-filters .filter-btn').forEach(btn => btn.classList.remove('active'));
-                }
+                if (filterType === 'status') currentStatusFilter = filterValue;
+                else if (filterType === 'priority') currentPriorityFilter = filterValue;
+                else if (filterType === 'date') currentDateFilter = filterValue;
+                
+                document.querySelectorAll(`[data-filter-type="${filterType}"]`).forEach(btn => btn.classList.remove('active'));
                 event.target.classList.add('active');
                 renderChecklist();
             }
@@ -366,12 +448,21 @@
         function handleFieldChange(event, itemId, field) { const itemIndex = checklistData.findIndex(d => d.id === itemId); if (itemIndex > -1) { checklistData[itemIndex][field] = event.target.value; saveData(); } }
         function handleMoveTask(event, itemId) { const itemIndex = checklistData.findIndex(d => d.id === itemId); if (itemIndex > -1) { checklistData[itemIndex].rubro = event.target.value; saveData(); } }
         function handleDeleteTask(itemId) { const taskToDelete = checklistData.find(d => d.id === itemId); if (confirm(`¿Estás seguro de que quieres eliminar la tarea "${taskToDelete.requerimiento}"?`)) { checklistData = checklistData.filter(d => d.id !== itemId); saveData(); } }
-        function handleToggleEdit(itemId) { const itemIndex = checklistData.findIndex(d => d.id === itemId); if (itemIndex > -1) { checklistData.forEach((item, index) => item.isEditing = index === itemIndex); renderChecklist(); } }
+        function handleToggleEdit(itemId) { const itemIndex = checklistData.findIndex(d => d.id === itemId); if (itemIndex > -1) { checklistData.forEach((item, index) => item.isEditing = index === itemIndex); saveData(); } }
         function handleSaveTask(itemId) { const itemIndex = checklistData.findIndex(d => d.id === itemId); const inputElement = document.getElementById(`edit-input-${itemId}`); if (itemIndex > -1 && inputElement) { checklistData[itemIndex].requerimiento = inputElement.value; checklistData[itemIndex].isEditing = false; saveData(); } }
 
         function applyStatusStyles(element, status) { element.className = element.className.split(' ').filter(c => !Object.values(statusOptions).join(' ').includes(c)).join(' '); const styles = statusOptions[status] || 'bg-gray-100 text-gray-800 border-gray-300'; element.classList.add(...styles.split(' ')); }
         function toggleAccordion(accordionItem) { const content = accordionItem.querySelector('.accordion-content'); const icon = accordionItem.querySelector('svg:last-child'); content.classList.toggle('open'); icon.classList.toggle('rotate-180'); }
-        function exportToPDF() { const { jsPDF } = window.jspdf; const header = document.querySelector('header'); const checklistContainer = document.getElementById('checklist-container'); const printContainer = document.createElement('div'); printContainer.style.padding = '20px'; printContainer.style.backgroundColor = 'white'; printContainer.innerHTML = header.outerHTML + checklistContainer.outerHTML; printContainer.querySelectorAll('.cursor-pointer svg.transition-transform').forEach(el => el.remove()); printContainer.querySelectorAll('.flex.items-center.gap-x-2').forEach(el => el.remove()); printContainer.querySelectorAll('input[type="text"], input[type="date"]').forEach(input => { const text = document.createElement('span'); text.textContent = input.value; text.className = 'text-sm p-1'; input.parentNode.replaceChild(text, input); }); printContainer.querySelectorAll('.status-select, .responsible-select, .priority-select').forEach(select => { const value = select.value; const span = document.createElement('span'); span.textContent = value; span.className = 'p-2 rounded-md text-sm font-semibold ' + (priorityStyles[value] || statusOptions[value] || ''); select.parentNode.replaceChild(span, select); }); document.body.appendChild(printContainer); html2canvas(printContainer, { scale: 2, windowWidth: printContainer.scrollWidth, windowHeight: printContainer.scrollHeight }).then(canvas => { document.body.removeChild(printContainer); const imgData = canvas.toDataURL('image/png'); const pdf = new jsPDF('p', 'mm', 'a4'); const pdfWidth = pdf.internal.pageSize.getWidth(); const pdfHeight = pdf.internal.pageSize.getHeight(); const canvasWidth = canvas.width; const canvasHeight = canvas.height; const ratio = canvasWidth / canvasHeight; const imgWidth = pdfWidth - 20; const imgHeight = imgWidth / ratio; let heightLeft = imgHeight; let position = 10; pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight); heightLeft -= (pdfHeight - 20); while (heightLeft > 0) { position = position - pdfHeight + 20; pdf.addPage(); pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight); heightLeft -= (pdfHeight - 20); } pdf.save(`checklist-pendientes-${new Date().toISOString().slice(0,10)}.pdf`); }); }
+        function exportToPDF() {
+            document.querySelectorAll('.accordion-content').forEach(content => {
+                if (!content.classList.contains('open')) {
+                    content.classList.add('open');
+                }
+            });
+            setTimeout(() => {
+                window.print();
+            }, 500);
+        }
         
         document.addEventListener('DOMContentLoaded', () => {
             const formOverlay = document.getElementById('form-overlay');
@@ -380,12 +471,14 @@
             const closeFormBtn = document.getElementById('close-form-btn');
             const statusFilters = document.getElementById('status-filters');
             const priorityFilters = document.getElementById('priority-filters');
+            const dateFilters = document.getElementById('date-filters');
             const exportBtn = document.getElementById('export-pdf-btn');
 
             addTaskBtn.addEventListener('click', () => formOverlay.classList.add('visible'));
             closeFormBtn.addEventListener('click', () => formOverlay.classList.remove('visible'));
             statusFilters.addEventListener('click', handleFilterClick);
             priorityFilters.addEventListener('click', handleFilterClick);
+            dateFilters.addEventListener('click', handleFilterClick);
             exportBtn.addEventListener('click', exportToPDF);
             
             addTaskForm.addEventListener('submit', (e) => {

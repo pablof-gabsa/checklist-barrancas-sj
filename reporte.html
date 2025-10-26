@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reporte Checklist Barrancas de San José</title>
+    <title>Reporte Plan de trabajo BARRANCAS DE SAN JOSE</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
@@ -18,35 +18,57 @@
         html { font-family: 'Inter', sans-serif; }
         body { background-color: #f3f4f6; }
         .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out; }
-        .accordion-content.open { max-height: 2000px; transition: max-height 1s ease-in-out; }
+        .accordion-content.open { max-height: 5000px; }
         .filter-btn.active { background-color: #009999; color: white; border-color: #009999;}
+        
+        @media print {
+            body { background-color: white; }
+            #form-overlay, #controls, #summary, footer, .no-print { display: none !important; }
+            main, .container { padding: 0 !important; margin: 0 !important; max-width: 100% !important; }
+            .accordion-content { max-height: none !important; display: block !important; }
+            .bg-white { box-shadow: none !important; }
+            @page { size: landscape; }
+        }
     </style>
 </head>
 <body class="antialiased">
     <div class="container mx-auto p-4 sm:p-6 lg:p-8">
         <header class="text-center mb-8">
-            <h1 class="text-3xl sm:text-4xl font-bold text-institutional">Checklist temas pendientes Barrancas de San José</h1>
-            <p class="text-md text-gray-600 mt-2">Seguimiento interactivo del estado de temas pendientes (Modo solo lectura)</p>
+            <h1 class="text-3xl sm:text-4xl font-bold text-institutional">Plan de trabajo BARRANCAS DE SAN JOSE</h1>
+            <p class="text-xs text-gray-400 font-semibold mt-1">V 3.4</p>
+            <p class="text-md text-gray-600 mt-2">Seguimiento interactivo del estado del plan de trabajo (Modo solo lectura)</p>
         </header>
 
-        <div id="controls" class="bg-white p-4 rounded-lg shadow-md mb-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div id="controls" class="bg-white p-4 rounded-lg shadow-md mb-8 space-y-4">
             <div class="flex items-center gap-2">
-                <span class="text-gray-600 font-bold">Modo Visualización</span>
+                <span class="text-gray-600 font-bold py-2 px-4">Modo Visualización</span>
+                <button id="export-pdf-btn" class="bg-gray-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors">Exportar a PDF</button>
             </div>
-            <div class="flex flex-col sm:flex-row gap-4 items-center">
-                <div id="status-filters" class="flex flex-wrap items-center gap-2">
-                    <span class="text-sm font-semibold text-gray-600 mr-2">Estado:</span>
-                    <button class="filter-btn active py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="status" data-filter="Todos">Todos</button>
-                    <button class="filter-btn py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="status" data-filter="Pendiente">Pendiente</button>
-                    <button class="filter-btn py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="status" data-filter="En Proceso">En Proceso</button>
-                    <button class="filter-btn py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="status" data-filter="OK">OK</button>
-                </div>
-                <div id="priority-filters" class="flex flex-wrap items-center gap-2 border-t sm:border-t-0 sm:border-l pt-2 sm:pt-0 sm:pl-4 mt-2 sm:mt-0">
-                    <span class="text-sm font-semibold text-gray-600 mr-2">Prioridad:</span>
-                    <button class="filter-btn active py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="priority" data-filter="Todos">Todas</button>
-                    <button class="filter-btn py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="priority" data-filter="Baja">Baja</button>
-                    <button class="filter-btn py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="priority" data-filter="Media">Media</button>
-                    <button class="filter-btn py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="priority" data-filter="Alta">Alta</button>
+            <div class="border-t border-gray-200 pt-4">
+                <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                    <h3 class="text-md font-bold text-gray-700 flex-shrink-0">Filtros:</h3>
+                    <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center w-full">
+                        <div id="status-filters" class="flex flex-wrap items-center gap-2">
+                            <span class="text-sm font-semibold text-gray-600 mr-2">Estado:</span>
+                            <button class="filter-btn active py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="status" data-filter="Todos">Todos</button>
+                            <button class="filter-btn py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="status" data-filter="Pendiente">Pendiente</button>
+                            <button class="filter-btn py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="status" data-filter="En Proceso">En Proceso</button>
+                            <button class="filter-btn py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="status" data-filter="OK">OK</button>
+                        </div>
+                        <div id="priority-filters" class="flex flex-wrap items-center gap-2 border-t sm:border-t-0 sm:border-l pt-2 sm:pt-0 sm:pl-4 mt-2 sm:mt-0">
+                            <span class="text-sm font-semibold text-gray-600 mr-2">Prioridad:</span>
+                            <button class="filter-btn active py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="priority" data-filter="Todos">Todas</button>
+                            <button class="filter-btn py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="priority" data-filter="Baja">Baja</button>
+                            <button class="filter-btn py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="priority" data-filter="Media">Media</button>
+                            <button class="filter-btn py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="priority" data-filter="Alta">Alta</button>
+                        </div>
+                        <div id="date-filters" class="flex flex-wrap items-center gap-2 border-t sm:border-t-0 sm:border-l pt-2 sm:pt-0 sm:pl-4 mt-2 sm:mt-0">
+                            <span class="text-sm font-semibold text-gray-600 mr-2">Vence:</span>
+                            <button class="filter-btn active py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="date" data-filter="Todas">Todas</button>
+                            <button class="filter-btn py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="date" data-filter="Vencidas">Vencidas</button>
+                            <button class="filter-btn py-1 px-3 rounded-full text-sm transition-colors border" data-filter-type="date" data-filter="Proximas">Próximas (7d)</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -77,7 +99,7 @@
     </div>
 
     <script>
-        // --- INICIO DE LA CONFIGURACIÓN DE FIREBASE (Barrancas de San José) ---
+        // --- INICIO DE LA CONFIGURACIÓN DE FIREBASE (BARRANCAS DE SAN JOSE) ---
         const firebaseConfig = {
             apiKey: "AIzaSyDskH3zhOCZ6hILyoRk0buViR0jlGqkcT4",
             authDomain: "checklist-barrancas-sj.firebaseapp.com",
@@ -96,6 +118,7 @@
         let responsibleChart = null; 
         let currentStatusFilter = 'Todos';
         let currentPriorityFilter = 'Todos';
+        let currentDateFilter = 'Todas';
 
         const rubros = ['Operativos', 'Obras de infraestructura', 'Administrativos', 'Archivado'];
         const statusOptions = { 'Pendiente': 'bg-yellow-100 text-yellow-800', 'OK': 'bg-green-100 text-green-800', 'En Proceso': 'bg-blue-100 text-blue-800' };
@@ -127,61 +150,110 @@
             });
         }
 
-        function renderChecklist() {
-            const container = document.getElementById('checklist-container');
-            container.innerHTML = '';
-            const filteredData = checklistData.filter(item => 
+        function getFilteredData() {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            let filtered = checklistData.filter(item => 
                 (currentStatusFilter === 'Todos' || item.estado === currentStatusFilter) &&
                 (currentPriorityFilter === 'Todos' || item.prioridad === currentPriorityFilter)
             );
+            if (currentDateFilter !== 'Todas') {
+                filtered = filtered.filter(item => {
+                    if (!item.deadline) return false;
+                    const taskDate = new Date(item.deadline + 'T00:00:00');
+                    if (currentDateFilter === 'Vencidas') {
+                        return taskDate < today && item.estado !== 'OK';
+                    }
+                    if (currentDateFilter === 'Proximas') {
+                        const sevenDaysFromNow = new Date(today);
+                        sevenDaysFromNow.setDate(today.getDate() + 7);
+                        return taskDate >= today && taskDate <= sevenDaysFromNow;
+                    }
+                    return true;
+                });
+            }
+            return filtered;
+        }
+
+        function renderChecklist() {
+            const container = document.getElementById('checklist-container');
+            container.innerHTML = '';
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const filteredData = getFilteredData();
             const groupedData = filteredData.reduce((acc, item) => { (acc[item.rubro] = acc[item.rubro] || []).push(item); return acc; }, {});
 
             rubros.forEach(rubro => {
-                const items = groupedData[rubro] || [];
+                const itemsInRubro = checklistData.filter(i => i.rubro === rubro);
+                const itemsToShow = groupedData[rubro] || [];
+                
+                itemsToShow.sort((a, b) => (a.deadline && b.deadline) ? new Date(a.deadline) - new Date(b.deadline) : !a.deadline - !b.deadline);
+
                 const accordionItem = document.createElement('div');
                 accordionItem.className = 'bg-white rounded-lg shadow-md overflow-hidden';
-                const okCount = items.filter(i => i.estado === 'OK').length;
+                const okCount = itemsInRubro.filter(i => i.estado === 'OK').length;
+                const totalInRubro = itemsInRubro.length;
+                
                 const header = document.createElement('div');
                 header.className = 'p-4 flex justify-between items-center cursor-pointer hover:bg-gray-50';
                 header.onclick = () => toggleAccordion(accordionItem);
-                header.innerHTML = `<div class="flex items-center">${rubroIcons[rubro] || ''}<h3 class="text-lg font-bold text-gray-700">${rubro}</h3></div><div class="flex items-center space-x-2"><span class="text-sm font-semibold text-gray-600">${okCount}/${items.length}</span><svg class="w-6 h-6 text-gray-500 transition-transform transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></div>`;
+
+                let overdueIndicator = '';
+                const hasOverdue = itemsInRubro.some(item => {
+                    if (!item.deadline || item.estado === 'OK') return false;
+                    return new Date(item.deadline + 'T00:00:00') < today;
+                });
+                if (hasOverdue) {
+                    overdueIndicator = '<span class="w-2.5 h-2.5 bg-red-500 rounded-full ml-2 animate-pulse"></span>';
+                }
+
+                header.innerHTML = `<div class="flex items-center">${rubroIcons[rubro] || ''}<h3 class="text-lg font-bold text-gray-700">${rubro}</h3>${overdueIndicator}</div><div class="flex items-center space-x-2"><span class="text-sm font-semibold text-gray-600">${okCount}/${totalInRubro}</span><svg class="w-6 h-6 text-gray-500 transition-transform transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></div>`;
+                
                 const content = document.createElement('div');
                 content.className = 'accordion-content border-t border-gray-200';
                 
-                if (items.length === 0) {
-                     content.innerHTML = `<p class="text-center text-gray-500 p-4">No hay tareas en este rubro.</p>`;
+                if (itemsToShow.length === 0) {
+                     content.innerHTML = `<p class="text-center text-gray-500 p-4">No hay tareas que coincidan con los filtros actuales.</p>`;
                 } else {
+                    const headerRow = document.createElement('div');
+                    headerRow.className = 'hidden md:grid grid-cols-[1fr_110px_150px_180px_120px] items-center gap-x-4 px-4 pt-2 text-xs text-gray-500 font-bold uppercase';
+                    headerRow.innerHTML = `<span>Requerimiento</span><span class="text-center">Prioridad</span><span>Responsable</span><span>Vencimiento</span><span class="text-center">Estado</span>`;
+                    content.appendChild(headerRow);
+
                     const list = document.createElement('ul');
                     list.className = 'divide-y divide-gray-200';
-                    items.forEach(item => {
+                    itemsToShow.forEach(item => {
                         const listItem = document.createElement('li');
                         listItem.className = 'px-4 py-3';
                         const taskRow = document.createElement('div');
-                        taskRow.className = 'flex flex-col sm:flex-row items-start sm:items-center gap-x-6 gap-y-2';
+                        taskRow.className = 'grid grid-cols-1 md:grid-cols-[1fr_110px_150px_180px_120px] items-center gap-x-4 gap-y-2';
                         
                         const requerimientoP = document.createElement('p');
-                        requerimientoP.className = 'flex-1 text-gray-800 font-medium';
+                        requerimientoP.className = 'text-gray-800 font-medium col-span-full md:col-span-1 break-words';
                         requerimientoP.textContent = item.requerimiento;
                         taskRow.appendChild(requerimientoP);
 
                         const priorityBadge = document.createElement('span');
                         priorityBadge.textContent = item.prioridad || 'Baja';
-                        priorityBadge.className = `px-2 py-1 text-xs font-semibold rounded-full ${priorityStyles[item.prioridad] || priorityStyles['Baja']}`;
+                        priorityBadge.className = `px-2 py-1 text-xs font-semibold rounded-full justify-self-center ${priorityStyles[item.prioridad] || priorityStyles['Baja']}`;
                         taskRow.appendChild(priorityBadge);
                         
                         const responsibleSpan = document.createElement('span');
-                        responsibleSpan.className = 'text-sm text-gray-700 w-36';
-                        responsibleSpan.innerHTML = `<span class="font-semibold">Resp:</span> ${item.responsable || 'N/A'}`;
+                        responsibleSpan.className = 'text-sm text-gray-700 w-full';
+                        responsibleSpan.innerHTML = `${item.responsable || 'N/A'}`;
                         taskRow.appendChild(responsibleSpan);
 
                         const deadlineSpan = document.createElement('span');
                         deadlineSpan.className = 'text-sm text-gray-700';
-                        deadlineSpan.innerHTML = `<span class="font-semibold">Vence:</span> ${item.deadline || 'N/A'}`;
+                        if (item.deadline && new Date(item.deadline + 'T00:00:00') < today && item.estado !== 'OK') {
+                            deadlineSpan.classList.add('text-red-600', 'font-bold');
+                        }
+                        deadlineSpan.innerHTML = `${item.deadline || 'N/A'}`;
                         taskRow.appendChild(deadlineSpan);
 
                         const statusBadge = document.createElement('span');
                         statusBadge.textContent = item.estado;
-                        statusBadge.className = `px-2 py-1 text-xs font-semibold rounded-full ${statusOptions[item.estado] || 'bg-gray-100'}`;
+                        statusBadge.className = `px-2 py-1 text-xs font-semibold rounded-full justify-self-center ${statusOptions[item.estado] || 'bg-gray-100'}`;
                         taskRow.appendChild(statusBadge);
 
                         listItem.appendChild(taskRow);
@@ -197,10 +269,7 @@
         }
         
         function updateSummary() {
-            const dataToSummarize = checklistData.filter(item => 
-                (currentStatusFilter === 'Todos' || item.estado === currentStatusFilter) &&
-                (currentPriorityFilter === 'Todos' || item.prioridad === currentPriorityFilter)
-            );
+            const dataToSummarize = getFilteredData();
             const total = dataToSummarize.length;
             const stats = dataToSummarize.reduce((acc, item) => { (acc[item.estado] = (acc[item.estado] || 0) + 1); return acc; }, {});
             const okCount = stats['OK'] || 0;
@@ -209,6 +278,7 @@
             let filterText = [];
             if (currentStatusFilter !== 'Todos') filterText.push(`Estado: ${currentStatusFilter}`);
             if (currentPriorityFilter !== 'Todos') filterText.push(`Prioridad: ${currentPriorityFilter}`);
+            if (currentDateFilter !== 'Todas') filterText.push(`Vence: ${currentDateFilter}`);
             document.getElementById('filter-label').textContent = filterText.length > 0 ? `(${filterText.join(', ')})` : '';
             renderPieChart(stats);
             renderResponsibleChart(dataToSummarize);
@@ -246,22 +316,31 @@
             const filterType = event.target.dataset.filterType;
             const filterValue = event.target.dataset.filter;
             if (filterType) {
-                if (filterType === 'status') {
-                    currentStatusFilter = filterValue;
-                    document.querySelectorAll('#status-filters .filter-btn').forEach(btn => btn.classList.remove('active'));
-                } else if (filterType === 'priority') {
-                    currentPriorityFilter = filterValue;
-                    document.querySelectorAll('#priority-filters .filter-btn').forEach(btn => btn.classList.remove('active'));
-                }
+                if (filterType === 'status') currentStatusFilter = filterValue;
+                else if (filterType === 'priority') currentPriorityFilter = filterValue;
+                else if (filterType === 'date') currentDateFilter = filterValue;
+                
+                document.querySelectorAll(`[data-filter-type="${filterType}"]`).forEach(btn => btn.classList.remove('active'));
                 event.target.classList.add('active');
                 renderChecklist();
             }
         }
         function toggleAccordion(accordionItem) { const content = accordionItem.querySelector('.accordion-content'); const icon = accordionItem.querySelector('svg:last-child'); content.classList.toggle('open'); icon.classList.toggle('rotate-180'); }
         
+        function exportToPDF() {
+            document.querySelectorAll('.accordion-content:not(.open)').forEach(content => {
+                content.classList.add('open');
+            });
+            setTimeout(() => {
+                window.print();
+            }, 500);
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('status-filters').addEventListener('click', handleFilterClick);
             document.getElementById('priority-filters').addEventListener('click', handleFilterClick);
+            document.getElementById('date-filters').addEventListener('click', handleFilterClick);
+            document.getElementById('export-pdf-btn').addEventListener('click', exportToPDF);
             loadData();
         });
     </script>
