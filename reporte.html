@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reporte Plan de trabajo BARRANCAS DE SANTA MARIA</title>
+    <title>Reporte Plan de trabajo BARRANCAS DE SAN JOSE</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-auth-compat.js"></script>
 
     <script>
         tailwind.config = { theme: { extend: { colors: { institutional: '#009999' } } } }
@@ -83,7 +84,7 @@
     
     <div class="container mx-auto p-4 sm:p-6 lg:p-8">
         <header class="text-center mb-8">
-            <h1 class="text-3xl sm:text-4xl font-bold text-institutional">Plan de trabajo BARRANCAS DE SANTA MARIA</h1>
+            <h1 class="text-3xl sm:text-4xl font-bold text-institutional">Plan de trabajo BARRANCAS DE SAN JOSE</h1>
             <p class="text-xs text-gray-400 font-semibold mt-1">V 5.0</p>
             <p class="text-md text-gray-600 mt-2">Seguimiento interactivo del estado del plan de trabajo (Modo solo lectura)</p>
         </header>
@@ -122,18 +123,19 @@
     </div>
 
     <script>
-        // --- INICIO DE LA CONFIGURACIÓN DE FIREBASE (BARRANCAS DE SANTA MARIA) ---
+        // --- INICIO DE LA CONFIGURACIÓN DE FIREBASE (BARRANCAS DE SAN JOSE) ---
         const firebaseConfig = {
-            apiKey: "AIzaSyDHn0ImcBuUB9P22j2dmodiVU9TX46hhOQ",
-            authDomain: "checklist-barrancas-sm.firebaseapp.com",
-            databaseURL: "https://checklist-barrancas-sm-default-rtdb.firebaseio.com",
-            projectId: "checklist-barrancas-sm",
-            storageBucket: "checklist-barrancas-sm.firebasestorage.app",
-            messagingSenderId: "801988372673",
-            appId: "1:801988372673:web:d68290b7351b148f994c40"
+            apiKey: "AIzaSyDskH3zhOCZ6hILyoRk0buViR0jlGqkcT4",
+            authDomain: "checklist-barrancas-sj.firebaseapp.com",
+            databaseURL: "https://checklist-barrancas-sj-default-rtdb.firebaseio.com",
+            projectId: "checklist-barrancas-sj",
+            storageBucket: "checklist-barrancas-sj.firebasestorage.app",
+            messagingSenderId: "40980053699",
+            appId: "1:40980053699:web:50558cb4f615861fa66c76"
         };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
+        const auth = firebase.auth(); // Inicializar Auth
         // --- FIN DE LA CONFIGURACIÓN DE FIREBASE ---
 
         let checklistData = [];
@@ -155,7 +157,7 @@
         };
         const statusColors = { 
             'Pendiente': '#FBBF24', 
-            'Realizado': '#10B981', 
+            'Realizado': '#009999', 
             'En Proceso': '#60A5FA',
             'Suspendido': '#9CA3AF'
         };
@@ -167,15 +169,17 @@
         };
 
         const rubroIcons = {
-            'Operativos': `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>`,
+            'Operativos': `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>`,
             'Obras de infraestructura': `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>`,
             'Administrativos': `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>`,
+            'Tramite de subdivision': `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a4 4 0 00-4-4H3m14 6v-2a4 4 0 00-4-4h-2m-4 4H7m6 4v2m0-10V5a2 2 0 00-2-2h-2a2 2 0 00-2 2v2m6 0h2m-6 0H9" /></svg>`,
             'Eliminado': `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>`,
             'default': `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>`
         };
         
         function loadInitialData() {
-            const defaultRubros = ['Operativos', 'Obras de infraestructura', 'Administrativos', 'Eliminado'];
+            // Rubros default para este barrio
+            const defaultRubros = ['Operativos', 'Obras de infraestructura', 'Administrativos', 'Tramite de subdivision', 'Eliminado'];
             const defaultResponsables = ['Administrador', 'Intendente', 'Proveedor', 'Operadora', 'RRHH', 'Compras', 'Otros'];
             
             const rubrosPromise = database.ref('rubros').once('value');
@@ -185,9 +189,13 @@
                 const rubrosData = rubrosSnapshot.val();
                 if (rubrosData && Array.isArray(rubrosData)) {
                     rubros = rubrosData;
-                    if (!rubros.includes('Eliminado')) rubros.push('Eliminado');
+                    if (!rubros.includes('Eliminado')) {
+                        rubros.push('Eliminado');
+                        database.ref('rubros').set(rubros);
+                    }
                 } else {
                     rubros = defaultRubros; 
+                    database.ref('rubros').set(rubros); 
                 }
                 
                 const responsablesData = responsablesSnapshot.val();
@@ -195,6 +203,7 @@
                     responsables = responsablesData;
                 } else {
                     responsables = defaultResponsables;
+                    database.ref('responsables').set(responsables);
                 }
                 
                 loadTasks();
@@ -359,7 +368,7 @@
                             }
                             return 0;
                         });
-                        
+
                         const headerRow = document.createElement('div');
                         headerRow.className = 'hidden md:grid grid-cols-[1fr_110px_150px_180px_120px] items-center gap-x-4 px-4 pt-2 text-xs text-gray-500 font-bold uppercase';
                         headerRow.innerHTML = `<span>Requerimiento</span><span class="text-center">Prioridad</span><span>Responsable</span><span>Vencimiento</span><span class="text-center">Estado</span>`;
@@ -534,7 +543,22 @@
             responsibleFilters.addEventListener('click', handleFilterClick);
 
             exportBtn.addEventListener('click', exportToPDF);
-            loadInitialData(); 
+
+            // MODIFICADO: Autenticación Anónima
+            auth.signInAnonymously()
+                .then(() => {
+                    console.log('Usuario autenticado anónimamente');
+                })
+                .catch((error) => {
+                    console.error('Error en autenticación anónima:', error);
+                    alert("Error de conexión segura: " + error.message);
+                });
+
+            auth.onAuthStateChanged((user) => {
+                if (user) {
+                    loadInitialData();
+                }
+            });
         });
     </script>
 </body>
